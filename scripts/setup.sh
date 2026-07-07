@@ -38,6 +38,17 @@ fi
 
 command -v hermes >/dev/null 2>&1 || err "hermes não encontrado no PATH."
 
+# Interpretador Python: preferimos o do venv do hermes (já tem PyYAML).
+# Caímos para o python3 do sistema só se ele tiver o módulo yaml.
+HERMES_PY="$(dirname "$(readlink -f "$(command -v hermes)")")/python"
+if [[ -x "$HERMES_PY" ]] && "$HERMES_PY" -c 'import yaml' 2>/dev/null; then
+  PY="$HERMES_PY"
+elif python3 -c 'import yaml' 2>/dev/null; then
+  PY="python3"
+else
+  err "Nenhum Python com PyYAML disponível (nem o do hermes, nem o do sistema)."
+fi
+
 # 3. injeta a chave no .env do hermes (sem duplicar) -----------
 mkdir -p "$HERMES_HOME"
 HERMES_ENV="$HERMES_HOME/.env"
@@ -51,7 +62,7 @@ fi
 
 # 4. modelo padrão + fallback grátis ---------------------------
 say "Configurando modelo grátis padrão + cadeia de fallback"
-python3 - "$HERMES_HOME/config.yaml" "$ROOT/examples/config.fallback.yaml" <<'PY'
+"$PY" - "$HERMES_HOME/config.yaml" "$ROOT/examples/config.fallback.yaml" <<'PY'
 import sys, yaml, os
 cfg_path, tmpl_path = sys.argv[1], sys.argv[2]
 cfg = {}
