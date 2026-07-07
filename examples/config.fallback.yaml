@@ -1,0 +1,29 @@
+# =============================================================
+#  Trecho de exemplo para ~/.hermes/config.yaml
+# =============================================================
+#  Este arquivo é só REFERÊNCIA. Não copie ele inteiro por cima
+#  do seu config.yaml — copie apenas o bloco "fallback_providers"
+#  (ou rode ./scripts/setup.sh, que faz isso pra você).
+#
+#  Como funciona: o hermes tenta o "model" principal e, se ele
+#  falhar com rate-limit (HTTP 429), sobrecarga ou erro de conexão,
+#  desce a lista abaixo na ordem. Como os modelos ":free" vivem
+#  batendo em 429, encadear vários é o que mantém o agente de pé.
+# =============================================================
+
+model:
+  provider: openrouter
+  default: "openai/gpt-oss-120b:free"
+
+# Cadeia tentada em ordem quando o modelo principal falha.
+fallback_providers:
+  - provider: openrouter
+    model: "qwen/qwen3-coder:free"
+  - provider: openrouter
+    model: "meta-llama/llama-3.3-70b-instruct:free"
+  - provider: openrouter
+    model: "qwen/qwen3-next-80b-a3b-instruct:free"
+  - provider: openrouter
+    model: "openai/gpt-oss-20b:free"
+  - provider: openrouter
+    model: "nvidia/nemotron-3-super-120b-a12b:free"

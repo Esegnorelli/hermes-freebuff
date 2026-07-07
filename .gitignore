@@ -1,0 +1,40 @@
+# =============================================================
+#  SEGREDOS — NUNCA versionar
+# =============================================================
+# Arquivos de ambiente reais (só .env.example é commitado)
+.env
+.env.*
+!.env.example
+*.env
+env
+.envrc
+
+# Chaves / credenciais soltas
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+credentials.json
+secrets.json
+auth.json
+*.secret
+*_token
+*_secret
+
+# Config real do hermes (pode conter chaves) — nunca commitar
+config.yaml
+.hermes/
+
+# =============================================================
+#  Lixo comum
+# =============================================================
+__pycache__/
+*.py[cod]
+node_modules/
+.venv/
+venv/
+dist/
+build/
+.DS_Store
+*.log
